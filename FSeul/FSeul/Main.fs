@@ -12,12 +12,13 @@ let rec fib = function
 let main() =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    let result = testsource.function2 50
+    let t = slow2 100 2365135
+    printfn "%O" t
     timer.Stop()
-    let elapsed : string = System.Convert.ToString(timer.ElapsedMilliseconds)
-    System.Console.WriteLine("result: {0}",result)
-    printfn "%s ms" elapsed
-    
+    //let elapsed : string = System.Convert.ToString(timer.ElapsedMilliseconds)
+    //System.Console.WriteLine("result: {0}",result)
+    printfn "%O ms" timer.ElapsedMilliseconds
+
 
 let run = main()
 System.Console.ReadKey() |> ignore
