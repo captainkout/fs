@@ -12,8 +12,12 @@ let rec fib = function
 let main() =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    let t = Convert.ToInt64(100) + 23L
-    printfn "%O" t
+    let   x = 1.23456789123456789M|>decimal
+    let y =35.0
+    
+    Console.WriteLine(
+        (x))
+
     timer.Stop()
 
     printfn "%O ms" timer.Elapsed
