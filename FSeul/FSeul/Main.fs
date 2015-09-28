@@ -4,24 +4,19 @@
 open System
 open testsource
 
-let rec fib = function
-    | 0 -> 0
-    | 1 -> 1
-    | n -> fib (n - 1) + fib (n - 2)
-
 let main() =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    let   x = 1.23456789123456789M|>decimal
-    let y =35.0
     
-    Console.WriteLine(
-        (x))
-
+    let x =
+        (113916,23584684) 
+        ||>testsource.gcd
+    Console.WriteLine(x|>string)
     timer.Stop()
 
-    printfn "%O ms" timer.Elapsed
+    timer.Elapsed 
+        |> printfn "%O ms" 
 
 
-let run = main()
+main()
 System.Console.ReadKey() |> ignore
