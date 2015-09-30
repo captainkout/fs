@@ -2,18 +2,15 @@
 // See the 'F# Tutorial' project for more help.
 
 open System
-open testsource
+open eulib91
 
 let main() =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     
-    let x =
-        (113916,23584684) 
-        ||>testsource.gcd
-    Console.WriteLine(x|>string)
-    timer.Stop()
-
+    let l = eulib91.main (0,1) (1,0) []
+    Console.WriteLine(l.Length()+1)
+        
     timer.Elapsed 
         |> printfn "%O ms" 
 

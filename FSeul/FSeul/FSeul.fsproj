@@ -47,6 +47,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <Compile Include="testsource.fs" />
+    <Compile Include="eulib91.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <PropertyGroup>
