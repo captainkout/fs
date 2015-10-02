@@ -2,19 +2,17 @@
 // See the 'F# Tutorial' project for more help.
 
 open System
-open eulib91_99
+open eulib91
 
 let main() =
-    GC.Collect()
-    GC.WaitForFullGCComplete()
-    GC.WaitForPendingFinalizers()
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     
-    eulib91_99.ninetytwo |> printfn "%O"
-    //Math.Min((5/2),2.0)|> printfn "%O"
+    let l = eulib91.main (0,1) (1,0) []
+    Console.WriteLine(l.Length()+1)
+        
     timer.Elapsed 
-        |> printfn "%O sec" 
+        |> printfn "%O ms" 
 
 
 main()

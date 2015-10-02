@@ -4,6 +4,5 @@ C:\fs\FSeul\FSeul\bin\Debug\FSeul.exe
 C:\fs\FSeul\FSeul\bin\Debug\FSeul.pdb
 C:\fs\FSeul\FSeul\bin\Debug\FSharp.Core.dll
 C:\fs\FSeul\FSeul\bin\Debug\FSharp.Core.xml
-C:\fs\FSeul\FSeul\obj\Debug\FSeul.fsprojResolveAssemblyReference.cache
 C:\fs\FSeul\FSeul\obj\Debug\FSeul.exe
 C:\fs\FSeul\FSeul\obj\Debug\FSeul.pdb

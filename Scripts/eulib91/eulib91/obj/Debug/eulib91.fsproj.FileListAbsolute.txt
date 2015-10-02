@@ -1,0 +1,8 @@
+C:\fs\Scripts\eulib91\eulib91\bin\Debug\eulib91.exe.config
+C:\fs\Scripts\eulib91\eulib91\bin\Debug\eulib91.XML
+C:\fs\Scripts\eulib91\eulib91\bin\Debug\eulib91.exe
+C:\fs\Scripts\eulib91\eulib91\bin\Debug\eulib91.pdb
+C:\fs\Scripts\eulib91\eulib91\bin\Debug\FSharp.Core.dll
+C:\fs\Scripts\eulib91\eulib91\bin\Debug\FSharp.Core.xml
+C:\fs\Scripts\eulib91\eulib91\obj\Debug\eulib91.exe
+C:\fs\Scripts\eulib91\eulib91\obj\Debug\eulib91.pdb
