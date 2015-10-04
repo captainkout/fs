@@ -11,10 +11,12 @@ let main() =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     
-    eulib91_99.ninetytwo |> printfn "%O"
-    //Math.Min((5/2),2.0)|> printfn "%O"
+    eulib91_99.ninetytwoB 10000000|> printfn "%O"
+
     timer.Elapsed 
         |> printfn "%O sec" 
+
+
 
 
 main()
