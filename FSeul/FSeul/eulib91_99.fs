@@ -19,37 +19,47 @@
                 for y in 1..s do
                     yield (x,y)}
             |> Seq.fold f 0
-    let ninetytwo max= 
+    let ninetytwo max= //16sec
         let rec f i =
-            match (sumsqdig 0 i) with
-            |a when a=1-> 1
-            |a when a=89->89
+            match sumsqdig 0 i with
+            |a when a=1||a=89->a
             |a-> f a 
         let folder acc one =
             match one with
             |a when a=89 ->acc+1
             |a->acc
-        Seq.map f [1..max]
+        Seq.map f {1..max}
             |>Seq.fold folder 0
-    let ninetytwoB max= 
+    let ninetytwoB max= //9sec
         let d = new Dictionary<'a, 'b>()
-        let rec mem l n = 
-            match l with
-            |[]->n
-            |h::t->
-                d.Add(h,n) 
-                mem t n
         let rec f i l =
-            match (sumsqdig 0 i) with
-            |a when d.ContainsKey a -> mem l d.[a] 
-            |a when a=1-> mem l 1
-            |a when a= 89-> mem l 89 
-            |a-> f a (a::l)
-        let rec f2 acc i = 
-            match i,(f i []) with
-            |(a,b) when a=max->acc
-            |(a,b) when b =89-> f2 (acc+1) (i+1)
-            |(_,_) ->f2 acc (i+1) 
+            let rec mem l n = 
+                match l with
+                |[]-> n
+                |h::t-> 
+                    d.Add(h,n)
+                    mem t n 
+            match sumsqdig 0 i with
+            |a when d.ContainsKey i ->mem l d.[i]
+            |a when a=1->mem (i::l) 1 
+            |a when a= 89->mem (i::l) 89
+            |a-> f a (i::l)
+        let rec f2 (acc:int) (i:int) =
+            if i=max then acc
+            else
+                match f i [] with
+                |a when a=89-> f2 (acc+1) (i+1)
+                |a ->f2 acc (i+1)
         f2 0 1 
-
-            
+    let ninetytwoC max= //12sec
+        let rec f2 acc i =
+            let rec f i =
+                match (sumsqdig 0 i) with
+                |a when a=1||a=89->a
+                |a-> f a
+            if i=max then acc
+            else
+                match f i with
+                |a when a=89-> f2 (acc+1) (i+1)
+                |a ->f2 acc (i+1)
+        f2 0 1 

@@ -11,13 +11,19 @@ let main() =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     
-    eulib91_99.ninetytwoB 10000000|> printfn "%O"
 
-    timer.Elapsed 
-        |> printfn "%O sec" 
-
+    helper.comb 3 ["a";"a";"b";"c"]
+        |>List.iter (fun x->printfn "%A" x)
 
 
+    timer.Elapsed |>printfn "%A sec"
+
+
+//
+//    timer.Restart()
+//
+//
+//    timer.Elapsed |>printfn "%A sec"
 
 main()
 System.Console.ReadKey() |> ignore
