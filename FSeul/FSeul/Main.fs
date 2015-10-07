@@ -10,10 +10,7 @@ let main() =
     GC.WaitForPendingFinalizers()
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-    
 
-    helper.comb 3 ["a";"a";"b";"c"]
-        |>List.iter (fun x->printfn "%A" x)
 
 
     timer.Elapsed |>printfn "%A sec"

@@ -63,3 +63,5 @@
                 |a when a=89-> f2 (acc+1) (i+1)
                 |a ->f2 acc (i+1)
         f2 0 1 
+//    let ninetythree max = 
+//        
