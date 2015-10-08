@@ -11,8 +11,9 @@ let main() =
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
 
-
-
+    
+    printfn "%A" (scratchpad.eulib93) 
+    
     timer.Elapsed |>printfn "%A sec"
 
 

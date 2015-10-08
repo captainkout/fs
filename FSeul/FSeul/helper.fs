@@ -14,29 +14,24 @@
         | _, [] -> []
         | m, h :: t -> 
             List.map (fun y -> h :: y) (comb (m-1) t) @ comb m t
-    let perm arr =
-        let next_perm (arr:array<int>) = 
-            let mutable i= (arr.Length)-1
-            while i>0 && arr.[i-1] >= arr.[i] do
-                i<- i-1
-            if i<=0 then
-                []
-            else
-                let mutable j = (arr.Length)-1
-                while arr.[j]<=arr.[i-1] do
-                    j<-j-1
-                let tmp = arr.[j]
-                arr.[j]<-arr.[i-1]
-                arr.[i-1]<-tmp
-                while i<j do
-                    let tmp2 = arr.[i]
-                    arr.[i]<-arr.[j]
-                    arr.[j]<-tmp2
-                    i<-i+1
-                    j<-j-1
-                List.ofArray arr
-        let rec f arr l = 
-            match next_perm arr with
-            |[] -> List.rev l
-            |a -> f arr (a::l)
-        f arr [(List.ofArray arr)]
+    let rec perm l =
+        let n = List.length l in
+        if n = 1 then 
+            [l] 
+        else
+            let rec sub e = function
+                | [] -> failwith "sub"
+                | h :: t -> 
+                    if h = e then 
+                        t 
+                    else 
+                        h :: sub e t
+            let rec aux k =
+                let e = List.nth l k
+                let subperms = perm (sub e l)
+                let t = List.map (fun a -> e::a) subperms
+                if k < n-1 then 
+                    t @ (aux (k+1))
+                else 
+                    t
+            aux 0;; 
