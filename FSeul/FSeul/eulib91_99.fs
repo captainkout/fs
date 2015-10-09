@@ -44,7 +44,7 @@
                 |a when a=89-> f2 (acc+1) (i+1)
                 |a ->f2 acc (i+1)
         f2 0 1 
-    let eulib93 max= 
+    let ninetythree max= 
         let max =8 //i know this is where it ends
         let div a b=
             if b=0. then 0. else a/b 
@@ -52,7 +52,7 @@
         let sub a b = a-b
         let mult a b = a*b
         let l2 = List.map helper.perm (helper.comb 3 [0..11])
-                    |>List.fold (fun acc one-> acc@one) []
+                    |> List.fold (fun acc one-> acc@one) []
                     |> List.map (fun x1-> List.map (fun x2->
                                                 [( add ); ( add ); ( add ); 
                                                 ( sub ); ( sub ); ( sub ); 

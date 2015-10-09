@@ -10,17 +10,16 @@ let main() =
     GC.WaitForPendingFinalizers()
     let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
-
-    
-    let x = helper.comb 3 [0..2]
-    
-    timer.Elapsed |>printfn "%A sec"
-
-
 //
+//    let t = (scratchpad.test)
+//    Seq.iter (fun x-> printfn "%A" x) t
+    
+    timer.Elapsed 
+        |>printfn "%A sec"
+
+
 //    timer.Restart()
 //
-//    let y = scratchpad.comb 3 [0..100]
 //    timer.Elapsed |>printfn "%A sec"
 
 main()
