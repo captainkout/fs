@@ -12,7 +12,7 @@ let main() =
     timer.Start()
 
     
-    printfn "%A" (scratchpad.eulib93) 
+    let x = helper.comb 3 [0..2]
     
     timer.Elapsed |>printfn "%A sec"
 
@@ -20,7 +20,7 @@ let main() =
 //
 //    timer.Restart()
 //
-//
+//    let y = scratchpad.comb 3 [0..100]
 //    timer.Elapsed |>printfn "%A sec"
 
 main()

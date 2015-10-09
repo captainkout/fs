@@ -15,7 +15,7 @@
         | m, h :: t -> 
             List.map (fun y -> h :: y) (comb (m-1) t) @ comb m t
     let rec perm l =
-        let n = List.length l in
+        let n = List.length l
         if n = 1 then 
             [l] 
         else
@@ -26,12 +26,11 @@
                         t 
                     else 
                         h :: sub e t
-            let rec aux k =
+            let rec f k =
                 let e = List.nth l k
-                let subperms = perm (sub e l)
-                let t = List.map (fun a -> e::a) subperms
+                let t = List.map (fun a -> e::a) (perm (sub e l))
                 if k < n-1 then 
-                    t @ (aux (k+1))
+                    t @ (f (k+1))
                 else 
                     t
-            aux 0;; 
+            f 0;; 
