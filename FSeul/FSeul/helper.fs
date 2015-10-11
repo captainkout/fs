@@ -7,7 +7,7 @@
     let isqrt n =
         let rec iter t =
             let d = n - t*t
-            if (0 <= d) && (d < t+t+1) then t// t*t <= n < (t+1)*(t+1)
+            if (0 <= d) && (d < t+t+1) then t
             else iter ((t+(n/t))/2)
         iter 1
     let rec sumsqdig acc x =
@@ -18,27 +18,22 @@
         match m, lst with
         | 0, _ -> [[]]
         | _, [] -> []
-        | m, h :: t -> 
+        | m, h :: t ->
             List.map (fun y -> h :: y) (comb (m-1) t) @ comb m t
     let rec perm l =
         let n = List.length l
-        if n = 1 then 
-            [l] 
+        if n = 1 then [l] 
         else
             let rec sub e = function
                 | [] -> failwith "sub"
                 | h :: t -> 
-                    if h = e then 
-                        t 
-                    else 
-                        h :: sub e t
+                    if h = e then t 
+                    else h :: sub e t
             let rec f k =
                 let e = List.nth l k
                 let t = List.map (fun a -> e::a) (perm (sub e l))
-                if k < n-1 then 
-                    t @ (f (k+1))
-                else 
-                    t
+                if k < n-1 then t @ (f (k+1))
+                else t
             f 0;; 
     let pythag stop= 
         let rec loop work =seq {
