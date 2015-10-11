@@ -6,21 +6,18 @@ open eulib91_99
 
 let main() =
     GC.Collect()
-    GC.WaitForFullGCComplete()
+    GC.WaitForFullGCComplete() |>ignore
     GC.WaitForPendingFinalizers()
     let timer = new System.Diagnostics.Stopwatch()
+        
     timer.Start()
-//
-//    let t = (scratchpad.test)
-//    Seq.iter (fun x-> printfn "%A" x) t
-    
-    timer.Elapsed 
-        |>printfn "%A sec"
+
+    (ninetyfour)
+        |> printfn "%A"
+    //List.iter (fun x-> printfn "not fancy %A" x) (List.sort ros)
 
 
-//    timer.Restart()
-//
-//    timer.Elapsed |>printfn "%A sec"
-
+    timer.Elapsed
+        |>printfn "not fancy %A"
 main()
 System.Console.ReadKey() |> ignore

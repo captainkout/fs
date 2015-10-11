@@ -45,7 +45,7 @@
                 |a ->f2 acc (i+1)
         f2 0 1 
     let ninetythree max= 
-        let max =8 //i know this is where it ends
+        let max =8 //i know this is, where it ends
         let div a b=
             if b=0. then 0. else a/b 
         let add a b = a+b
@@ -80,3 +80,18 @@
             |h::t-> looper t ((proc [h])::acc)
         (looper (helper.comb 4 ([1..max]|>List.map (fun x -> (float x)))) [])
             |> List.maxBy (fun (x,y)->x)
+    let ninetyfour =
+        let rec test a b c max =
+            if 2*(a+c)<=max||2*(b+c)<=max then true
+            else false
+        let folder acc x = 
+            match x with
+            |(a,b,c) ->
+                let one = 2*a-c
+                let two = 2*b-c
+                if (one = 1 || one = -1 ) && ( two = 1 || two = -1) then (acc+2*(a+c)+2*(b+c))
+                elif (one = 1 || one = -1 ) then (acc+2*(a+c))
+                elif ( two = 1 || two = -1) then (acc+2*(b+c))
+                else acc
+        helper.pythag_ros test 1000
+            |> Seq.fold folder 0
