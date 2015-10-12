@@ -2,7 +2,7 @@
     open System
     open System.Collections.Generic
 
-    let ninetyone = 
+    let ninetyone start= 
         let s = 50 //size in euler
         let f acc one =
             match one with
@@ -18,7 +18,7 @@
                 for y in 1..s do
                     yield (x,y)}
             |> Seq.fold f 0
-    let ninetytwo max= //16sec, seq ops are so cool
+    let ninetytwo start= //16sec, seq ops are so cool
         let max = 10000000 //size in euler
         let rec f i =
             match helper.sumsqdig 0 i with
@@ -30,7 +30,7 @@
             |a->acc
         Seq.map f {1..max}
             |>Seq.fold folder 0
-    let ninetytwoC max= //12sec, recursive iteration is cool too
+    let ninetytwoC start= //12sec, recursive iteration is cool too
         let max = 10000000 //size in euler
         let rec f2 acc i =
             let rec f i =
@@ -44,7 +44,7 @@
                 |a when a=89-> f2 (acc+1) (i+1)
                 |a ->f2 acc (i+1)
         f2 0 1 
-    let ninetythree max= 
+    let ninetythree start= 
         let max =8 //i know this is, where it ends
         let div a b=
             if b=0. then 0. else a/b 
@@ -80,8 +80,8 @@
             |h::t-> looper t ((proc [h])::acc)
         (looper (helper.comb 4 ([1..max]|>List.map (fun x -> (float x)))) [])
             |> List.maxBy (fun (x,y)->x)
-    let ninetyfour =
-        let rec test a b c max =
+    let ninetyfour start =
+        let rec test a b c max=
             if 2*(a+c)<=max||2*(b+c)<=max then true
             else false
         let folder acc x = 
@@ -93,5 +93,40 @@
                 elif (one = 1 || one = -1 ) then (acc+2*(a+c))
                 elif ( two = 1 || two = -1) then (acc+2*(b+c))
                 else acc
-        helper.pythag_ros test 1000
+        helper.pythag test 1000000000
             |> Seq.fold folder 0
+    let ninetyfive start =
+        let divs = Array.create 1000000 List.empty 
+        let narr = Array.create 1000000 Set.empty
+        let rec loop i j =
+            if i>=divs.Length/2 then ()
+            elif j>=divs.Length then loop (i+1) (2*(i+1))
+            else 
+                divs.[j]<- i::divs.[j]
+                loop i (j+i)
+        loop 1 2
+        let d = Array.map (fun x->List.sum x) divs
+        let rec loop i ni= 
+            if i>=narr.Length then () //done
+            elif ni<narr.Length     &&  narr.[i].Contains d.[ni] = false then 
+                narr.[i]    <-  narr.[i].Add d.[ni]
+                loop i d.[ni]
+            elif ni>narr.Length then
+                narr.[i]    <-  Set.empty
+                loop (i+1) (i+1)
+            else //find where it repeats
+                narr.[i]    <-  Set.empty |> Set.add d.[ni]
+                let rec loop2 ni2 = 
+                    if narr.[i].Contains d.[ni2] = false then 
+                        narr.[i]<-narr.[i].Add d.[ni2]
+                        loop2 d.[ni2]
+                    else ()
+                loop2 (d.[ni])
+                loop (i+1) (i+1)
+        loop 2 2
+        let (a,b,c) = Array.fold (fun acc (one:int Set) ->  
+                                    match acc with
+                                    |(a,b,c)->  if one.Count>b then 
+                                                    (Set.minElement one,one.Count,one)
+                                                else acc ) (0,0,Set.empty) narr
+        Set.minElement narr.[(Array.findIndex (fun x->x=c) narr)]
