@@ -14,22 +14,50 @@ let garbage f =
     (f 0) |> printfn "%A"
     timer.Elapsed |>printfn "%A"
 
-let Main fuck =
+
+type Square (x,y,i,c) =
+    let mutable localc = c
+    member this.x = x
+    member this.y = y
+    member this.i = i
+    member this.c
+        with get() = localc
+        and set (value) = localc <- value
+ 
+
+let Main frig =
     let f start =
-        let s = (helper.get_web_txt "https://projecteuler.net/project/resources/p096_sudoku.txt").Split [|'\n'|]
-        let s2 = [for a in s do
-                    if a.Contains("Grid")=false then 
-                        for achar in a do
-                        yield ((int achar)-48)]
-        let s3 = [for a in 1..9 do
-                    for b in 1..9 do
-                        yield (a,b)]
-        let rec loop i d= 
-            if i<=80 then loop (i+1) (Map.add s3.[i] s2.[i] d)
-            else d
-        loop 0 Map.empty
+
+        let r = new System.Random()
+
+        let rec loop2 m x y = 
+            match x,y with
+            |a,b when a=4 && b=4 ->(Map.add (a,b) (Square(a,b,r.Next(0,9),0)) m)
+            |a,b when a<4 && b=4 ->loop2 (Map.add (a,b) (Square(a,b,r.Next(0,9),0)) m) (x+1) 0
+            |a,b ->loop2 (Map.add (a,b) (Square(a,b,r.Next(0,9),0)) m) (x) (y+1)
+        let newd = loop2 (Map.empty) 1 1
+        printfn "%A" newd.[(1,1)].c
+        newd.[(1,1)].c<-43
+        let temp = (newd.[(1,1)].x, newd.[(1,1)].y, newd.[(1,1)].i,newd.[(1,1)].c)
+
+
+//        let col = Map.init for x in 1..4 do for y in 1..4 do 
+//                      Square(x,y,r.Next(0,9),0)
+        //let (d:Map<(int*int),Square>) = Map.empty
+//        printfn "%A" col.[0].c
+//        let rec loop (arr:array<Square>) i= 
+//            if i>= arr.Length then ()
+//            else 
+//                arr.[i].c<-99
+//                loop arr (i+1)
+//        loop col 0
+//
+//        col.[0].c
+        let x = 1
+        for y in 1..4 do newd.[(x,y)].c <-900
+        newd
     garbage f
     
 
-Main "bullshit"
+Main "bologna"
 System.Console.ReadKey() |>ignore
