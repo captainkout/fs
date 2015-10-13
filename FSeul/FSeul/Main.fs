@@ -14,16 +14,22 @@ let garbage f =
     (f 0) |> printfn "%A"
     timer.Elapsed |>printfn "%A"
 
-
-let main =
-    let f address =
-        let s = helper.get_web_txt "https://projecteuler.net/project/resources/p096_sudoku.txt"
-        s.ToString().Substring(0,100)
-    
-    
-    
-     
+let Main fuck =
+    let f start =
+        let s = (helper.get_web_txt "https://projecteuler.net/project/resources/p096_sudoku.txt").Split [|'\n'|]
+        let s2 = [for a in s do
+                    if a.Contains("Grid")=false then 
+                        for achar in a do
+                        yield ((int achar)-48)]
+        let s3 = [for a in 1..9 do
+                    for b in 1..9 do
+                        yield (a,b)]
+        let rec loop i d= 
+            if i<=80 then loop (i+1) (Map.add s3.[i] s2.[i] d)
+            else d
+        loop 0 Map.empty
     garbage f
+    
 
-main
-System.Console.ReadKey() |> ignore
+Main "bullshit"
+System.Console.ReadKey() |>ignore
