@@ -17,45 +17,63 @@ let garbage f =
 
 type Square (x,y,i,c) =
     let mutable localc = c
+    let mutable localpos =  if i=0 then set [1;2;3;4]
+                            else set[i] 
+    let mutable triedpos =  if i=0 then set []
+                            else set [1;2;3;4]
+    let grouper a b =   match a,b with
+                        |a1,b1 when a1<=2 &&    b1<=2    ->1
+                        |a1,b1 when a1>2  &&    b1<=2    ->2
+                        |a1,b1 when a1<=2 &&    b1>=2    ->3
+                        |a1,b1 when a1>2  &&    b1>=2    ->4
+                        |a1,b1->99999
+//    let grouper a b =   match a,b with
+//                        |a1,b1 when a1<=3   && b1<=3                ->1
+//                        |a1,b1 when a1>3    && a1<=6    && b1<=3    ->2
+//                        |a1,b1 when a1>6    && a1<=9    && b1<=3    ->3
+//                        |a1,b1 when a1<=3   && b1>3     && b1<=6    ->4
+//                        |a1,b1 when a1>3    && a1<=6    && b1>3     && b1<=6 ->5
+//                        |a1,b1 when a1>3    && a1<=6    && b1>6     ->6
+//                        |a1,b1 when a1>6    && b1<=3                ->7
+//                        |a1,b1 when a1>6    && b1>3    && b1<=6     ->8
+//                        |a1,b1 when a1>6&& b1>6 ->9
+//                        |a1,b1 ->999999
     member this.x = x
     member this.y = y
     member this.i = i
     member this.c
         with get() = localc
         and set (value) = localc <- value
- 
-
+    member this.g = (grouper x y)
+    member this.pos
+         with get() = localpos
+         and set(value)  = localpos <- value
+    member this.tried
+        with get() = triedpos
+        and set(value) = triedpos<-value
 let Main frig =
     let f start =
+        let lstr = "4030000100033010"
+        let arr = lstr.ToCharArray() |>Array.map (fun x -> (int x)-48)
+        let arr2 = [|for x in 1..4 do for y in 1..4 do yield Square(x,y,arr.[4*(x-1)+y-1],arr.[4*(x-1)+y-1])|]
 
-        let r = new System.Random()
+        while (Array.fold (fun acc (s1:Square) ->   if s1.c = 0 then acc+1
+                                                    else acc) 0 arr2) >0 do
+            Array.sortInPlaceBy (fun (s1:Square)-> s1.pos.Count) arr2
+            let update (s1:Square) = 
+                Array.iter (fun (s2:Square) -> 
+                            if (s2.x = s1.x || s2.y = s1.y || s2.g = s1.g) then 
+                                s2.pos <- (Set.remove s1.c s2.pos)) arr2
+                Array.iter (fun (s2:Square) ->
+                            if s2.pos.Count=1 then
+                                s2.c<- Set.toList s2.pos|>List.head) arr2
+            Array.iter update arr2
 
-        let rec loop2 m x y = 
-            match x,y with
-            |a,b when a=4 && b=4 ->(Map.add (a,b) (Square(a,b,r.Next(0,9),0)) m)
-            |a,b when a<4 && b=4 ->loop2 (Map.add (a,b) (Square(a,b,r.Next(0,9),0)) m) (x+1) 0
-            |a,b ->loop2 (Map.add (a,b) (Square(a,b,r.Next(0,9),0)) m) (x) (y+1)
-        let newd = loop2 (Map.empty) 1 1
-        printfn "%A" newd.[(1,1)].c
-        newd.[(1,1)].c<-43
-        let temp = (newd.[(1,1)].x, newd.[(1,1)].y, newd.[(1,1)].i,newd.[(1,1)].c)
 
+        Array.sortInPlaceBy (fun (s1:Square)-> 4*(s1.x-1)+s1.y-1 ) arr2
+        Array.iter (fun (s1:Square)->   if s1.y=4 then printfn "%A  " s1.c
+                                        else printf "%A  " s1.c ) arr2
 
-//        let col = Map.init for x in 1..4 do for y in 1..4 do 
-//                      Square(x,y,r.Next(0,9),0)
-        //let (d:Map<(int*int),Square>) = Map.empty
-//        printfn "%A" col.[0].c
-//        let rec loop (arr:array<Square>) i= 
-//            if i>= arr.Length then ()
-//            else 
-//                arr.[i].c<-99
-//                loop arr (i+1)
-//        loop col 0
-//
-//        col.[0].c
-        let x = 1
-        for y in 1..4 do newd.[(x,y)].c <-900
-        newd
     garbage f
     
 
