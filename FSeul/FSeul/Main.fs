@@ -19,8 +19,8 @@ type Square (x,y,i,c) =
     let mutable localc = c
     let mutable localpos =  if i=0 then set [1;2;3;4;5;6;7;8;9]
                             else set[i] 
-    let mutable localorgpos =    if i=0 then set []
-                            else set [1;2;3;4;5;6;7;8;9]
+    let mutable localorgpos =       if i=0 then set []
+                                    else set [1;2;3;4;5;6;7;8;9]
     let grouper a b =   match a,b with
                         |a1,b1 when a1<=3   && b1<=3                ->1
                         |a1,b1 when a1<=3   && b1>3 && b1<=6        ->2
@@ -40,11 +40,11 @@ type Square (x,y,i,c) =
         and set (value) = localc <- value
     member this.g = (grouper x y)
     member this.pos
-         with get() = localpos
-         and set(value)  = localpos <- value
+        with get() = localpos
+        and set(value)  = localpos <- value
     member this.orgpos
-            with get() = localorgpos
-            and set(value)= localorgpos<-value
+        with get() = localorgpos
+        and set(value)= localorgpos<-value
 
 
 let Main frig =
@@ -133,16 +133,17 @@ let Main frig =
                                                         else printf "%A  " s1.c ) arr2
                         printfn "buggah %A" remaining
                         //Array.sortInPlaceBy (fun (s1:Square)-> s1.pos.Count) arr2
-                        if fst attempts = 0 then 
+                        if attempts = (0,0) then 
                             for s in arr2 do
                                 s.orgpos <- s.pos
                         else 
-                            if fst attempts % 80=0 then attempts <-((fst attempts),(snd attempts)+1)
-                            else attempts<- ((fst attempts) + 1, snd attempts)
-                            for i in 0..80 do
-                                let (c,p) = arrzeros.[i]
-                                arr2.[i].c <-c
-                                arr2.[i].pos<-p
+                            if  snd attempts = arr2.[fst attempts].pos.Count then
+                                attempts <- ((fst attempts)+1,0)
+                            else attempts <-((fst attempts),(snd attempts)+1)
+
+                            for s in arr2 do
+                                s.c<-s.i
+                                s.pos<-s.orgpos
 
                         if arr2.[fst attempts].c=0 then
                             arr2.[fst attempts].c <- (Set.toList arr2.[fst attempts].pos).[snd attempts]
