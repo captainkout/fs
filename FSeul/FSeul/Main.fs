@@ -19,7 +19,7 @@ type Square (x,y,i,c) =
     let mutable localc = c
     let mutable localpos =  if i=0 then set [1;2;3;4;5;6;7;8;9]
                             else set[i] 
-    let mutable triedpos =  if i=0 then set []
+    let mutable localorgpos =    if i=0 then set []
                             else set [1;2;3;4;5;6;7;8;9]
     let grouper a b =   match a,b with
                         |a1,b1 when a1<=3   && b1<=3                ->1
@@ -42,7 +42,9 @@ type Square (x,y,i,c) =
     member this.pos
          with get() = localpos
          and set(value)  = localpos <- value
-
+    member this.orgpos
+            with get() = localorgpos
+            and set(value)= localorgpos<-value
 
 
 let Main frig =
@@ -50,7 +52,7 @@ let Main frig =
         let s = (helper.get_web_txt "https://projecteuler.net/project/resources/p096_sudoku.txt").Split [|'\n'|]
         let mutable lstr =""
         let thesum = ref 0
-        for i in 1..500 do
+        for i in 51..70 do
             //printfn "%A" lstr
             if i % 10 <>0 then 
                 lstr <- lstr + s.[i]
@@ -60,8 +62,8 @@ let Main frig =
                 lstr<-""
                 let updated = ref true
                 let mutable remaining = 81
-                let arrzeros = Array.zeroCreate 81
-                let mutable attempts = 0
+                let arrzeros = Array.create 81 (0,Set.empty)
+                let mutable attempts = (0,0)
                 while (updated.Value =true) || remaining>0 do
                     //Array.sortInPlaceBy (fun (s1:Square)-> s1.pos.Count) arr2
                     if updated.Value=true then
@@ -78,6 +80,7 @@ let Main frig =
                                     (s2.x = s1.x || s2.y = s1.y || s2.g = s1.g) && //but same row col group
                                     s2.pos.Count>1 && s2.pos.Contains s1.c then 
                                         s2.pos <- (Set.remove s1.c s2.pos)
+                                        s2.c<- Set.toList s2.pos |>List.head
                                         updated.Value<-true 
                                         //Array.iter clean arr2
 
@@ -99,30 +102,25 @@ let Main frig =
                                 let chset = Array.fold colhidden (set[]) arr2
                                 let ghset = Array.fold grouphidden (set[]) arr2
 
-                                if s2.pos.Count>1 && (Set.op_Subtraction (s2.pos,rhset)).Count = 1 
-                                    then
+                                if s2.pos.Count>1 && (Set.op_Subtraction (s2.pos,rhset)).Count = 1 then
                                     s2.pos  <-Set.op_Subtraction (s2.pos,rhset)
-                                    //s2.c    <-Set.op_Subtraction (s2.pos,rhset)|>Set.toList |>List.head
+                                    s2.c    <- (s2.pos|>Set.toList).[0]
                                     //Array.iter clean arr2
                                     updated.Value<-true
-                                if s2.pos.Count>1 && (Set.op_Subtraction (s2.pos,chset)).Count = 1 
-                                    then
+                                if s2.pos.Count>1 && (Set.op_Subtraction (s2.pos,chset)).Count = 1  then
                                     s2.pos  <-Set.op_Subtraction (s2.pos,chset)
-                                    //s2.c    <-(Set.op_Subtraction (s2.pos,chset)|>Set.toList).[0]
+                                    s2.c    <-(s2.pos|>Set.toList).[0]
                                     //Array.iter clean arr2
                                     updated.Value<-true
                                 if s2.pos.Count>1 && (Set.op_Subtraction (s2.pos,ghset)).Count = 1 
                                     then
                                     s2.pos  <-Set.op_Subtraction (s2.pos,ghset)
-                                    //s2.c    <-(Set.op_Subtraction (s2.pos,ghset)|>Set.toList).[0]
+                                    s2.c    <-(s2.pos|>Set.toList).[0]
                                     //Array.iter clean arr2
                                     updated.Value<-true
                             Array.iter clean arr2
                             Array.iter part0 arr2
-                            Array.iter clean arr2
                             Array.iter part1 arr2
-                            Array.iter clean arr2
-                            Array.iter part0 arr2
                             Array.iter clean arr2                            
                         Array.iter upd arr2
                         remaining   <-  Array.fold (fun acc (s1:Square) ->  if s1.c = 0 then acc+1
@@ -131,27 +129,30 @@ let Main frig =
                         //Array.iter update arr2
                         //Array.sortInPlaceBy (fun (s1:Square)-> 9*(s1.x-1)+s1.y-1 ) arr2
 
-//                        Array.iter (fun (s1:Square)->   if s1.y=9 then printfn "%A  " s1.c
-//                                                        else printf "%A  " s1.c ) arr2
-                        printfn "buggah"
-                        if Array.sum arrzeros = 0 then
-                            for i in 0..80 do
-                                if arr2.[i].c >0 then arrzeros.[i]<-99
-                        else 
-                            for i in 0..80 do
-                                if arrzeros.[i]=0 then arr2.[i].c<-0
+                        Array.iter (fun (s1:Square)->   if s1.y=9 then printfn "%A  " s1.c
+                                                        else printf "%A  " s1.c ) arr2
+                        printfn "buggah %A" remaining
                         //Array.sortInPlaceBy (fun (s1:Square)-> s1.pos.Count) arr2
-                        if attempts =0 then attempts <- (Array.findIndex (fun (s1:Square)-> s1.pos.Count>1) arr2)
-                        else attempts <-attempts+1
+                        if fst attempts = 0 then 
+                            for s in arr2 do
+                                s.orgpos <- s.pos
+                        else 
+                            if fst attempts % 80=0 then attempts <-((fst attempts),(snd attempts)+1)
+                            else attempts<- ((fst attempts) + 1, snd attempts)
+                            for i in 0..80 do
+                                let (c,p) = arrzeros.[i]
+                                arr2.[i].c <-c
+                                arr2.[i].pos<-p
 
-                        if arr2.[attempts].c=0 then
-                            arr2.[attempts].c <- (Set.toList arr2.[attempts].pos).[0]
+                        if arr2.[fst attempts].c=0 then
+                            arr2.[fst attempts].c <- (Set.toList arr2.[fst attempts].pos).[snd attempts]
+                            arr2.[fst attempts].pos <- (Set.remove arr2.[fst attempts].c arr2.[snd attempts].pos)
 
                         updated.Value<-true
                   
-//                Array.sortInPlaceBy (fun (s1:Square)-> 9*(s1.x-1)+s1.y-1 ) arr2
-//                Array.iter (fun (s1:Square)->   if s1.y=9 then printfn "%A  " s1.c
-//                                                else printf "%A  " s1.c ) arr2
+                Array.sortInPlaceBy (fun (s1:Square)-> 9*(s1.x-1)+s1.y-1 ) arr2
+                Array.iter (fun (s1:Square)->   if s1.y=9 then printfn "%A  " s1.c
+                                                else printf "%A  " s1.c ) arr2
                 printfn "%A" (arr2.[0].c,arr2.[1].c,arr2.[2].c) 
 
                 thesum.Value <- thesum.Value + (int ((string arr2.[0].c) + (string arr2.[1].c) + (string arr2.[2].c)))
