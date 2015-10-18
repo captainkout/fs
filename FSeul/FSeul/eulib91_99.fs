@@ -175,3 +175,9 @@
                 if (Array.fold (fun (acc:int) (s:Square) -> if s.c > 0  then acc+1 else acc) 0 arr2) > 0 then start_guessing 0 Forward
                 thesum.Value <- thesum.Value + (int ((string arr2.[0].c) + (string arr2.[1].c) + (string arr2.[2].c)))
         thesum.Value
+    let ninetyseven start = 
+        let rec loop1 n times = 
+            match times with
+            |7830458L    -> (28433L*n+1L) % 10000000000L
+            |_          ->loop1 ((2L*n) % 10000000000L) (times+1L)
+        loop1 1L 1L
