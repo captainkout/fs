@@ -17,7 +17,7 @@ type Word (s:string)=
         let arr = Array.zeroCreate 26
         String.iter (fun (c:char) -> arr.[(int c)-65]<-arr.[(int c)-65]+1) s
         List.ofArray arr
-    let mutable (localanagram:Word list) = []
+    let mutable (localanagram:Word List) = []
     member this.spelled = s
     member this.lettercnt =  (init s)
     member this.ordered = this.spelled.ToCharArray() 
@@ -31,7 +31,7 @@ type Long (num:int64) =
         let arr = Array.zeroCreate 10
         string n |> String.iter (fun (c:char)-> arr.[(int c)-48]<-arr.[(int c)-48]+1)
         List.ofArray arr
-    let mutable localanagram = []
+    let mutable localanagram = None
     member this.num = num
     member this.numcnt = (init num)
     member this.anagram 
@@ -44,10 +44,11 @@ let Main frig =
                         |>  Array.map (fun w->Word w )
         let wanagrams (w:Word) = 
             let (testarr:Word []) = [||]
-            if Array.tryFind (fun (w1:Word) -> w.spelled <> w1.spelled && w.lettercnt=w1.lettercnt) wordlist = None then 
-                w.anagram   <-  testarr |> List.ofArray
-            else w.anagram  <-  Array.FindAll(wordlist,(fun (w1:Word) -> w.spelled <> w1.spelled && w.lettercnt=w1.lettercnt))
-                                    |>List.ofArray
+            match Array.tryFind (fun (w1:Word) -> w.spelled <> w1.spelled && w.lettercnt=w1.lettercnt) wordlist with 
+            |None -> w.anagram <- []
+            |Some((w:Word)) -> w.anagram  <-  [w]
+//            Array.FindAll(wordlist,(fun (w1:Word) -> w.spelled <> w1.spelled && w.lettercnt=w1.lettercnt))
+//                                    |>List.ofArray
         Array.iter wanagrams wordlist
         let newwordlist = Array.filter (fun (w:Word) -> w.anagram<>[]) wordlist |> List.ofArray |> List.sortBy (fun (w:Word) -> w.ordered)
         List.iter (fun (w:Word) -> printfn "%A" (w.spelled,w.ordered,w.anagram.[0].spelled)) newwordlist
