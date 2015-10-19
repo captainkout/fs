@@ -10,6 +10,12 @@
             if (0 <= d) && (d < t+t+1) then t
             else iter ((t+(n/t))/2)
         iter 1
+    let lsqrt n =
+        let rec iter t =
+            let d = n - t*t
+            if (0L <= d) && (d < t+t+1L) then t
+            else iter ((t+(n/t))/2L)
+        iter 1L
     let rec sumsqdig acc x =
         match x with
         |a when a=0-> acc

@@ -181,3 +181,59 @@
             |7830458L    -> (28433L*n+1L) % 10000000000L
             |_          ->loop1 ((2L*n) % 10000000000L) (times+1L)
         loop1 1L 1L
+
+    type Word (s:string)=
+        let init s =
+            let arr = Array.zeroCreate 26
+            String.iter (fun (c:char) -> arr.[(int c)-65]<-arr.[(int c)-65]+1) s
+            List.ofArray arr
+        let mutable localanagram = []
+        let mutable localmap = []
+        let mutable localnumanagram = []
+        member this.spelled = s
+        member this.lettercnt =  (init s)
+        member this.ordered = this.spelled.ToCharArray() 
+                                |>Array.map (fun x-> Array.findIndex (fun x1-> x=x1) (this.spelled.ToCharArray())) 
+                                |>List.ofArray
+        member this.anagram
+            with get() = localanagram
+            and set(value) = localanagram <- value
+        member this.map
+            with get() = localmap
+            and set(value) = localmap<-value
+        member this.numanagram
+            with get() = localnumanagram
+            and set(value) = localnumanagram<-value
+    let ninetyeight start =
+        let wordlist =  (helper.get_web_txt "https://projecteuler.net/project/resources/p098_words.txt").Replace("\"","").Split([|','|])
+                        |>  Array.map (fun w->Word w )
+        let wanagrams (w:Word) = 
+            let (testarr:Word []) = [||]
+            match Array.tryFind (fun (w1:Word) -> w.spelled <> w1.spelled && w.lettercnt=w1.lettercnt) wordlist with 
+            |None -> w.anagram <- []
+            |Some((wstar:Word)) -> w.anagram  <-  [wstar]
+        Array.iter wanagrams wordlist
+        let newwordlist = Array.filter (fun (w:Word) -> w.anagram<>[]) wordlist 
+                            |> List.ofArray 
+                            |> List.sortBy (fun (w:Word) -> w.ordered) 
+                            |>List.rev
+        let map_and_gram (w1:Word) (w2:Word) = 
+            let a,b = w1.spelled.ToCharArray() |>List.ofArray  ,w2.spelled.ToCharArray() |>List.ofArray
+            w1.map <- List.zip (List.map (fun x1->List.findIndex (fun x2 -> x1=x2) a) a) (List.map (fun x1->List.findIndex (fun x2 -> x1=x2) a) b) |>List.sort
+            let c = helper.comb a.Length [1..9] 
+                    |>List.map (fun (x:int list)-> helper.perm x)
+                    |>List.fold (fun acc l-> acc@l) []
+                    |> List.filter (fun x1 -> pown (List.fold (fun acc x2->acc+(string x2)) "" x1 |> int64  |> helper.lsqrt) 2 = (List.fold (fun acc x2->acc+(string x2)) "" x1|> int64 ))
+            let unzipper (a1:int list) m= 
+                let arr = Array.zeroCreate a1.Length
+                let rec loop a2 m2=
+                    match a2,m2 with
+                    |h1::t1, h2::t2-> 
+                            arr.[snd h2]<- h1
+                            loop t1 t2
+                    |_,_-> arr |> List.ofArray
+                loop a1 m
+            w1.numanagram <- List.filter (fun (l:int list)-> List.exists (fun elem->elem=(unzipper l w1.map)) c) c
+                                |>List.map (fun x1 -> List.fold (fun acc x2->acc+(string x2)) "" x1 |>int64 )
+        List.iter (fun (w:Word)->map_and_gram w w.anagram.Head) newwordlist
+        List.fold (fun acc (w:Word) -> acc @ w.numanagram ) [] newwordlist |>List.max
