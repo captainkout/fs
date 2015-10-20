@@ -237,3 +237,9 @@
                                 |>List.map (fun x1 -> List.fold (fun acc x2->acc+(string x2)) "" x1 |>int64 )
         List.iter (fun (w:Word)->map_and_gram w w.anagram.Head) newwordlist
         List.fold (fun acc (w:Word) -> acc @ w.numanagram ) [] newwordlist |>List.max
+    let ninetynine start = 
+        let s = (helper.get_web_txt "https://projecteuler.net/project/resources/p099_base_exp.txt").Split('\n')
+                |> List.ofArray |> List.map (fun st ->      let ns= st.Split(',') 
+                                                            ((float ns.[0]),(float ns.[1])) )
+                |> List.map (fun (b,e) -> e*(Math.Log10(b)))
+        1+(List.findIndex (fun x->x=List.max s) s)
