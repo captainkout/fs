@@ -1,46 +1,21 @@
-﻿open System
-
-let timer = new System.Diagnostics.Stopwatch()
-timer.Start()
- // this is the seq part .0291954
-let x = seq {for a in [1..5] do
-                for b in [1..5] do
-                    for c in [1..5] do 
-                        yield (a,b,c) }
-Seq.iter( fun elem ->
-    match elem with
-    | (a,b,c)-> Console.WriteLine("({0},{1},{2})",a,b,c)) x
-timer.Stop()
-timer.Elapsed |> Console.WriteLine
-
- // this is the list part .043782
-timer.Restart()
-let x2 = [for a in 1..5 do
-            for b in 1..5 do
-            for c in 1..5 do
-            yield (a,b,c)]
-
-let rec show l = 
-    match l with
-    |h::t ->
-        match h with
-        | (a,b,c)->
-            Console.WriteLine("({0},{1},{2})",a,b,c)
-        show t
-    |[]-> ()
-        
-show x2
-timer.Stop()
-timer.Elapsed |> Console.WriteLine
-
- // this is a purely imperative version .0297107
-timer.Restart()
-for a in 1..5 do 
-    for b in 1..5 do 
-        for c in 1..5 do
-
-        let tup = (a,b,c)
-        match tup with
-        |(a,b,c)-> Console.WriteLine("({0},{1},{2})",a,b,c)
-timer.Stop()
-timer.Elapsed |> Console.WriteLine
+﻿let isqrt x = 
+    x|>float|>sqrt |>int
+let fracroot root = 
+    let rec loop m0 d0 a0 s l = 
+        let m1= d0*a0-m0
+        let d1 = (root-(m1*m1))/d0
+        let a1 = ((isqrt root)+m1)/d1
+        if Set.contains (m1,d1,a1) s then
+            let rec loop2 l0 (l1:(int*int*int) list) = 
+                match l0 with
+                |[] ->      [l0 |> List.map (fun (a,b,c)->c) |> List.rev ; l1 |> List.map (fun (a,b,c)->c) ]
+                |h::t when h <> (m1,d1,a1)->    loop2 t (h::l1)
+                |h::t ->    [t |> List.map (fun (a,b,c)->c) |> List.rev ; h::l1 |> List.map (fun (a,b,c)->c) ]
+            loop2 l []
+        else
+            loop m1 d1 a1 (Set.add (m1,d1,a1) s) ((m1,d1,a1)::l)
+    loop 0 1 (isqrt root) (Set.add (0,1,(isqrt root)) Set.empty)  [(0,1,(isqrt root))]
+//fracroot 94
+let fracunpack l =
+    List.fold (fun acc x-> x @ acc) [] l
+fracunpack (fracroot 94)
