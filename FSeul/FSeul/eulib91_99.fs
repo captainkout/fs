@@ -223,7 +223,7 @@
             let c = helper.comb a.Length [1..9] 
                     |>List.map (fun (x:int list)-> helper.perm x)
                     |>List.fold (fun acc l-> acc@l) []
-                    |> List.filter (fun x1 -> pown (List.fold (fun acc x2->acc+(string x2)) "" x1 |> int64  |> helper.isqrt) 2 = (List.fold (fun acc x2->acc+(string x2)) "" x1|> int64 ))
+                    |> List.filter (fun x1 -> pown (List.fold (fun acc x2->acc+(string x2)) "" x1 |> int64  |> helper.Lsqrt) 2 = (List.fold (fun acc x2->acc+(string x2)) "" x1|> int64 ))
             let unzipper (a1:int list) m= 
                 let arr = Array.zeroCreate a1.Length
                 let rec loop a2 m2=

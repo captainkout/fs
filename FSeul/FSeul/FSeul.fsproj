@@ -50,6 +50,7 @@
     <None Include="App.config" />
     <Compile Include="helper.fs" />
     <Compile Include="eulib91_99.fs" />
+    <Compile Include="eulib100_109.fs" />
     <Compile Include="scratchpad.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
