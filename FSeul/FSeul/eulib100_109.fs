@@ -12,7 +12,7 @@
             let solve xbx =
                 let A = MathNet.Numerics.LinearAlgebra.MatrixExtensions.matrix (m |> helper.listSlice [0..(xbx-1)] |> List.map (helper.listSlice [0..(xbx-1)]))
                 let v =[ for n in [1.0..11.0] do
-                            yield (1.- n + n **2. - n**3. + n**4. - n**5. + n**6. - n**7. + n**8. - n**9. + n**10.)]
+                            yield (1.- n + (pown n 2) - (pown n 3) + (pown n 4) - (pown n 5) + (pown n 6) - (pown n 7) + (pown n 8) - (pown n 9) + (pown n 10))]
                             //yield (n**3.0)]
                 let b = MathNet.Numerics.LinearAlgebra.VectorExtensions.vector (v |> helper.listSlice [0..(xbx-1)])
                 A.Solve(b).ToArray() 
@@ -22,5 +22,5 @@
                             |> List.sum
             if x<10 then 
                 fip (acc+(solve x)) (x+1)
-            else acc+(solve x)
+            else System.Math.Round(acc+(solve x))
         fip 0M 1

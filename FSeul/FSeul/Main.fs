@@ -2,7 +2,6 @@
 // See the 'F# Tutorial' project for more help.
 
 open System
-open eulib91_99
 
 let garbage f = 
     GC.Collect()
@@ -13,10 +12,15 @@ let garbage f =
     (f 0) |> printfn "%A"
     timer.Elapsed |>printfn "%A"
 
-
 let Main frig =
-
-    garbage eulib100_109.hundredone
+    let f start = 
+        let s = (helper.get_web_txt "https://projecteuler.net/project/resources/p102_triangles.txt").Split [|'\n'|] 
+                    |> List.ofArray 
+                    |> List.map (fun (s1:string) -> s1.Split [|','|] |> List.ofArray 
+                                                    |>List.map (fun s2->if s2 <> "" then (int s2)
+                                                                        else 0)) 
+        s
+    garbage f
 
 Main "bologna"
 System.Console.ReadKey() |>ignore
