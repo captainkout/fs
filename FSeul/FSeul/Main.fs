@@ -3,6 +3,7 @@
 
 open System
 open eulib91_99
+
 let garbage f = 
     GC.Collect()
     GC.WaitForFullGCComplete() |>   ignore
@@ -14,9 +15,8 @@ let garbage f =
 
 
 let Main frig =
-    let f start =
-        helper.pellLike 61 2I
-    garbage f
+
+    garbage eulib100_109.hundredone
 
 Main "bologna"
 System.Console.ReadKey() |>ignore
