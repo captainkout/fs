@@ -10,3 +10,4 @@ C:\fs\FSeul\FSeul\bin\Debug\MathNet.Numerics.dll
 C:\fs\FSeul\FSeul\bin\Debug\MathNet.Numerics.FSharp.dll
 C:\fs\FSeul\FSeul\bin\Debug\MathNet.Numerics.xml
 C:\fs\FSeul\FSeul\bin\Debug\MathNet.Numerics.FSharp.xml
+C:\fs\FSeul\FSeul\obj\Debug\FSeul.fsprojResolveAssemblyReference.cache

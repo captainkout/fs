@@ -58,7 +58,7 @@
     let get_web_txt (address:string) =
         let client = new System.Net.WebClient()
         let s = new System.IO.StreamReader(client.OpenRead(address))
-        s.ReadToEnd()
+        s.ReadToEnd().ToString().Trim()
     let fracroot root = 
         let rec loop m0 d0 a0 s l = 
             let m1= d0*a0-m0
