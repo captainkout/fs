@@ -101,3 +101,10 @@
                 else loop (fracrootConverge root (conv+1)) root (conv+1) 
             else failwith "nothing found"
         loop (0I,0I) B 0 
+    let Ldigcnt (num:int64) =
+        let arr = Array.zeroCreate 10
+        let rec loop (n:int64) =
+            arr.[n%10L|>int]<-arr.[n%10L|>int]+1
+            if (n > 10L) then loop (n/10L)
+            else arr|>List.ofArray
+        loop num
