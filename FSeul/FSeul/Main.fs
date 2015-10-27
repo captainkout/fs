@@ -13,11 +13,8 @@ let garbage f =
     timer.Elapsed |>printfn "%A"
 
 let Main frig =
-    let f start = 
-        helper.comb 6 [11..25]
-            |>List.filter (fun l -> (l |> helper.listSlice [0..4] |> List.sum) > (l |> helper.listSlice [4..5] |>List.sum) &&
-                                    l.[0]>l.[5]-l.[1])
-            |>List.sortBy (fun l ->List.sum l)
+    let f = eulib100_109.hundredthree
+    
     garbage f
 
 Main "bologna"

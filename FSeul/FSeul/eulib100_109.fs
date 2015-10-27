@@ -63,3 +63,16 @@
                                                     |> List.ofArray 
                                                     |> List.map (fun s2->float s2))
                     |> List.fold folder 0
+    let hundredthree start = 
+        helper.comb 7 ([20..47])
+        |>List.filter (fun l -> (l.[0]+l.[1]) > l.[(List.length l)-1] && //lowest two less than top one
+                                    l.[0]+l.[1]+l.[2] > l.[(List.length l)-2]+l.[(List.length l)-1] && //lowest 3 less than top two
+                                    l.[0]+l.[1]+l.[2]+l.[3] > l.[(List.length l)-3]+l.[(List.length l)-2]+l.[(List.length l)-1] ) //lowest 4 less than top three
+        |>List.filter (fun l -> let test =[for a in 1..(l.Length-1) do
+                                            yield (helper.comb a l)] 
+                                            |> List.fold (fun acc l1-> l1@acc) []
+                                            |> List.map (fun l1 -> List.sum l1)
+                                List.length test = Set.count (Set.ofList test ))
+        |>List.sortBy (fun l -> (List.sum l))
+        |>List.head 
+        |>List.fold (fun acc i -> acc+(string i)) ""
