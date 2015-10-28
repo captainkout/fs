@@ -15,17 +15,13 @@ let garbage f =
 let Main frig =
     let f start = 
         let truecase = List.init 10 (fun x -> if x<>0 then 1 else 0)
-        let rec l109 e n =
-            if n < pown 10I e then n
-            else l109 e (n/10I)
-        let rec fib (a1:bigint) (a2:bigint) (i:int) s= 
-            match (helper.Ldigcnt (a2 % (pown 10I 9) |>int64)) = truecase, (helper.Ldigcnt ((l109 9 a2) |>int64)) = truecase ,Set.contains ((a2 % (pown 10I 9) |>int64)) s with
-            |_,_,true ->    printfn "%A" (a1+a2)
-                            i
-            |true,true,_ -> i
-            |_,_,_    ->  //printfn "%A \t %A \t %A" a1 a2 i
-                            fib (a2 % (pown 10I 9) |>int64) (a1+a2) (i+1) (Set.add (a1+a2) s)
-        fib 1I 1I 2 (Set.empty<int64>)
+        let (p:int64) = pown 10L 9
+        let rec fib (a1:int64) (a2:int64) (i:int) = 
+            match helper.Ldigcnt a2=truecase with
+            |true ->    printfn "%A \t %A" a2 i 
+                        fib a2 ((a1+a2)%p) (i+1) 
+            |false->    fib a2 ((a1+a2)%p) (i+1) 
+        fib 1L 1L 2 
     
     garbage f
 
