@@ -76,3 +76,11 @@
         |>List.sortBy (fun l -> (List.sum l))
         |>List.head 
         |>List.fold (fun acc i -> acc+(string i)) ""
+    let hundredfour start = 
+        let truecase = List.init 10 (fun x -> if x<>0 then 1 else 0)
+        let rec fib a1 a2 i =
+            let t= (i * 0.20898764024997873M-0.3494850021680094M)-System.Math.Floor(i * 0.20898764024997873M - 0.3494850021680094M)+8M |>float
+            match helper.Ldigcnt a2 =truecase, System.Math.Pow(10.0,t) |> int64 |>helper.Ldigcnt =truecase with
+            |true,true ->   i
+            |_,_-> fib a2 ((a1+a2)%(pown 10L 9)) (i+1M)
+        fib 1L 1L 2M
