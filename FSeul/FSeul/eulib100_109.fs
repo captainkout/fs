@@ -84,3 +84,23 @@
             |true,true ->   i
             |_,_-> fib a2 ((a1+a2)%(pown 10L 9)) (i+1M)
         fib 1L 1L 2M
+    let hundredfive start = 
+        let rec test (l:int list) a = //verify lowest x > highest x-1
+            if a>(l.Length/2) then true
+            elif    (l |> helper.listSlice [0..a] |> List.sum ) > ( l |> helper.listSlice [(l.Length-a)..(l.Length-1)] |> List.sum) then
+                    test l (a+1)
+            else false
+        (helper.get_web_txt "https://projecteuler.net/project/resources/p105_sets.txt").Split [|'\n'|]
+                |> Array.map (fun (x:string)->x.Split [|','|] 
+                                                |> Array.map (fun x->int x) 
+                                                |> Array.sort
+                                                |> List.ofArray)
+                |> List.ofArray
+                |> List.filter (fun l -> test l 1)
+                |> List.filter (fun l ->    let test =[for a in 1..(l.Length-1) do
+                                                        yield (helper.comb a l)] 
+                                                        |> List.fold (fun acc l1-> l1@acc) []
+                                                        |> List.map (fun l1 -> List.sum l1)
+                                            List.length test = Set.count (Set.ofList test ))
+                |> List.map (fun l->List.sum l)
+                |> List.sum
