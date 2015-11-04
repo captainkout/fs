@@ -104,3 +104,25 @@
                                             List.length test = Set.count (Set.ofList test ))
                 |> List.map (fun l->List.sum l)
                 |> List.sum
+    let hundredsix start = 
+        let rec test2 h l cnt =
+            let rec loop zl dir=
+                match zl with
+                |[]->0
+                |h::t when fst h = snd h -> 0
+                |h::t when (fst h>snd h)=dir -> loop t dir
+                |h::t -> 1
+            match l with
+            |[]-> cnt
+            |h2::t ->   if Set.intersect (Set.ofList h) (Set.ofList h2) = Set.empty then 
+                            test2 h t (cnt+(loop (List.zip h h2) (h.Head>h2.Head)))
+                        else test2 h t cnt
+        let rec test1 l cnt =
+            match l with
+            |[] -> cnt
+            |h::t -> test1 t (cnt+(test2 h t 0))
+        let l = List.init 12 (fun x->x)
+        [for a in 2..l.Length/2
+            do yield l |> helper.comb a]
+            |> List.map (fun item-> test1 item 0)
+            |> List.sum
