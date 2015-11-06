@@ -126,3 +126,30 @@
             do yield l |> helper.comb a]
             |> List.map (fun item-> test1 item 0)
             |> List.sum
+    let hundredseven start = 
+        let rec loop l1 (s1:Set<Set<int>>) cnt =
+            match l1 with
+            |[]-> cnt
+            |(w,s)::t ->
+                match Set.filter (fun s2-> Set.intersect s s2 <>Set.empty) s1 with
+                |inter when Set.count inter = 2 ->
+                    let s1upd =  Set.add (Set.fold (fun acc s2 -> Set.union acc s2) s inter) (Set.difference s1 inter)
+                    loop t s1upd (cnt+w)
+                |inter when Set.count inter = 1 ->
+                    let s1upd =  Set.add (Set.fold (fun acc s2 -> Set.union acc s2) s inter) (Set.difference s1 inter)
+                    if s1upd = s1 then 
+                        loop t s1 (cnt)
+                    else loop t s1upd (cnt+w)
+                |_ -> loop t (Set.add s s1) (cnt+w)
+        let x = (helper.get_web_txt "https://projecteuler.net/project/resources/p107_network.txt").Trim().Split [|'\n'|]
+                    |> Array.mapi (fun i1 s1 -> s1.Split [|','|] 
+                                                    |> Array.mapi (fun i2 s2 -> if s2.Contains "-" then (0,set[i1;i2]) 
+                                                                                else (int s2,Set[i1;i2]))
+                                                    |> Array.toList)
+                    |> List.ofArray
+                    |> List.fold (fun acc l-> l@acc) []
+                    |> Set.ofList
+                    |> Set.toList
+                    |> List.filter (fun s-> fst s <>0 )
+                    |> List.sortBy (fun (a,s)-> a)
+        (List.sumBy (fun (a,s)->a) x) - (loop x Set.empty<Set<int>> 0)

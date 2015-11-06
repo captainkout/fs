@@ -14,13 +14,8 @@ let garbage f =
 
 
 let Main frig =
-    let f start = 
 
-        let x = set[(10,0,1);(6,0,2);(4,2,3);(5,0,3);(15,3,1)]
-        "http://www.geeksforgeeks.org/greedy-algorithms-set-2-kruskals-minimum-spanning-tree-mst/"
-        
-        
-    garbage f
+    garbage eulib100_109.hundredseven
 
 Main "bologna"
 System.Console.ReadKey() |>ignore
