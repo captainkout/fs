@@ -121,6 +121,13 @@
             if (n > 10L) then loop (n/10L)
             else arr|>List.ofArray
         loop num
+    let idigcnt (num:int) =
+        let arr = Array.zeroCreate 10
+        let rec loop (n:int) =
+            arr.[n%10|>int]<-arr.[n%10|>int]+1
+            if (n > 10) then loop (n/10)
+            else arr|>List.ofArray
+        loop num
     let listPrint l = 
         List.iter (fun x -> printfn "%A" x) l
     let primeSeq max=
@@ -132,3 +139,13 @@
                     yield (2*i+1)
                     for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
                         bitarr.[j]<-false }
+    let primeSeqL max=
+        let bitarr = new System.Collections.BitArray((max/2L)+1L|>int,true)
+        bitarr.[0]<-false
+        seq{yield 2L
+            for i in 1..bitarr.Count-1 do
+                if bitarr.[i] = true then
+                    yield (2*i+1 |>int64)
+                    for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
+                        bitarr.[j]<-false }
+        
