@@ -20,3 +20,11 @@
                 |_,_-> arr |> List.ofArray
             loop a1 m
         List.filter (fun (l:int list)-> List.exists (fun elem->elem=(unzipper l zipper)) c) c
+    let test r b =
+        match box b with
+        | :? System.Int32 -> 
+            unbox b |> (+) 5 |> box |> r
+        | :? System.Double -> 
+            unbox b |> (+) 5. |> box |> r
+        | _ -> failwith "some other type"
+    //test (fun x -> System.Convert.ToInt32 x) 5 |> (+) 5

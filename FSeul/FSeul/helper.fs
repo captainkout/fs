@@ -55,6 +55,19 @@
                 if gcd m n =1 && stop (m*m-n*n) (2*m*n) (m*m+n*n) ms then
                     yield (m*m-n*n,2*m*n,m*m+n*n)}
         num_to stop max
+    let pythag_byMin =
+        let rec loop (queue:int list list) = seq {
+            match queue with
+            |[] -> [] |>ignore
+            |h::t->
+                yield h |> List.sort 
+                let a,b,c = h.[0],h.[1],h.[2]
+                yield!  [-a+2*b+2*c;  -2*a+b+2*c;  -2*a+2*b+3*c]::
+                        [a+2*b+2*c;   2*a+b+2*c;  2*a+2*b+3*c]::
+                        [a-2*b+2*c;   2*a-b+2*c;  2*a-2*b+3*c]::t
+                        |> List.sortBy (fun x-> List.min x)
+                        |> loop }
+        loop [[3;4;5]]
     let get_web_txt (address:string) =
         let client = new System.Net.WebClient()
         let s = new System.IO.StreamReader(client.OpenRead(address))
@@ -108,3 +121,14 @@
             if (n > 10L) then loop (n/10L)
             else arr|>List.ofArray
         loop num
+    let listPrint l = 
+        List.iter (fun x -> printfn "%A" x) l
+    let primeSeq max=
+        let bitarr = new System.Collections.BitArray((max/2)+1,true)
+        bitarr.[0]<-false
+        seq{yield 2
+            for i in 1..bitarr.Count-1 do
+                if bitarr.[i] = true then
+                    yield (2*i+1)
+                    for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
+                        bitarr.[j]<-false }

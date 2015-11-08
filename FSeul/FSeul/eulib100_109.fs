@@ -153,3 +153,61 @@
                     |> List.filter (fun s-> fst s <>0 )
                     |> List.sortBy (fun (a,s)-> a)
         (List.sumBy (fun (a,s)->a) x) - (loop x Set.empty<Set<int>> 0)
+
+    let hundredeight start = //updated for 110, use a really composite number to start
+        let primes = helper.primeSeq 10000 
+                        |> Array.ofSeq 
+                        |> Array.map (fun i -> int64 i)
+        let max = ref (0L,0L)
+        let rec loop2 i m n =
+            if i > (Array.length primes)-1 then 
+                0L //toss that shit
+            else
+                match primes.[i], n with
+                |_,1L -> 
+                    ((Map.fold (fun acc k v -> (2L*v+1L)*acc) 1L m)+1L)/2L
+                |a ,_ when n % a=0L-> 
+                    if Map.containsKey a m then 
+                        loop2 i (Map.add a (m.[a]+1L) m) (n/a)
+                    else
+                        loop2 i (Map.add a 1L m) (n/a)
+                |a,_->
+                    loop2 (i+1) m n
+        let rec loop1 i =
+            if snd max.Value> 4000000L then
+                max.Value
+            else
+                match loop2 0 (Map.empty<int64,int64>) i, snd max.Value with
+                |n1,m1 when n1>m1->
+                    do max.Value<- (i,n1)
+                    loop1 (i+135863557830L)
+                |_,_->
+                    loop1 (i+135863557830L)
+        loop1 135863557830L
+    let hundrednine start = 
+        let poss =("sb",25)::("db",50)::
+                    [for a in 1..20 do 
+                         yield ("s-"+string a, a)
+                         yield ("d-"+string a, 2*a)
+                         yield ("t-"+string a, 3*a)]
+        let threes =helper.comb 3 (poss@poss@poss)
+                    |> List.filter (fun l ->
+                                        (fst l.[2]).Contains "d")
+                    |> List.map (fun l ->   let firstTwo =[l.[0];l.[1]] |> List.sort
+                                            (firstTwo.[0],firstTwo.[1],l.[2]) )
+                    |> Set.ofList
+                    |> Set.filter (fun (a,b,c) -> snd a + snd b + snd c < 100 )
+                    |> Set.count
+        let twos =helper.comb 2 (poss@poss)
+                    |> List.filter (fun l ->
+                                        (fst l.[1]).Contains "d")
+                    |> List.map (fun l -> (l.[0],l.[1]))
+                    |> Set.ofList
+                    |> Set.filter (fun (a,b) -> snd a + snd b < 100 )
+                    |> Set.count
+        let ones = poss
+                    |> List.filter (fun t ->
+                                        (fst t).Contains "d")
+                    |> List.filter (fun (a)-> snd a < 100)
+                    |> List.length
+        ones+twos+threes
