@@ -148,4 +148,31 @@
                     yield (2*i+1 |>int64)
                     for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
                         bitarr.[j]<-false }
-        
+    let pythagTrianglei i =
+        let rec loop i prev acc =
+            match i,prev with
+            |0,_-> List.rev acc
+            |_,[]-> loop (i) [1] [[1]]
+            |_,_ ->
+                let plen = List.length prev
+                let next = (List.init (plen+1) (fun x -> 
+                                                if x=0 || x >= plen then 
+                                                    1
+                                                else 
+                                                    prev.[x-1]+prev.[x]) ) 
+                loop (i-1) next (next::acc)
+        loop i [] []
+    let pythagTriangleL i =
+        let rec loop i prev acc =
+            match i,prev with
+            |0,_-> List.rev acc
+            |_,[]-> loop (i) [1L] [[1L]]
+            |_,_ ->
+                let plen = List.length prev
+                let next = (List.init (plen+1) (fun x -> 
+                                                        if x=0 || x >= plen then 
+                                                            1L
+                                                        else 
+                                                            prev.[x-1]+prev.[x]) ) 
+                loop (i-1) next (next::acc)
+        loop i [] []

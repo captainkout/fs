@@ -15,24 +15,23 @@ let garbage f =
 
 let Main frig =
     let f start = 
-        let primes = helper.primeSeq (pown 10 9) |> Seq.toArray
-        for n in 2..8 do
-            let mutable max = Array.init 10 (fun x->(0,[]))
-            for p in Array.filter (fun i->
-                                    i > pown 10 (n-1) && i<pown 10 n ) primes do
-                let dc = helper.idigcnt p
-                let m = List.max dc
-                do List.iteri (fun i n-> 
-                                if n = m && n > fst max.[i] then
-                                    do max.[i] <- (n,[p])
-                                elif n = m && n= fst max.[i] then
-                                    do max.[i] <- (n,p::(snd max.[i])) ) dc
-            let fin = Array.mapi (fun i (m,n) ->
-                                    (i,m,List.length n,List.sum n)) max
-                        |> Array.toList 
-            do printfn "starting %A..." n
-            do helper.listPrint fin 
-            do printfn "sum is \t%A \n" (List.sumBy (fun (a,b,c,d)->d) fin)
+//        for dig in 1..5 do
+//            let l =helper.comb dig [for a in 1..9 do
+//                                    for b in 1..dig do
+//                                    yield a]
+//            printfn "starting dig--%A" dig
+//            printfn "list\t%A" (List.length l)
+//            printfn "set\t%A\n" (Set.ofList l
+//                                |> Set.count)
+
+        let factorial n = 
+            let rec loop acc i=
+                if i<=0 then 1I
+                elif i=1 then acc
+                else loop (acc*(bigint i)) (i-1)
+            loop 1I n 
+        factorial 3
+
 
     garbage f
 Main "bologna"
