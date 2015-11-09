@@ -37,3 +37,22 @@
         do printfn "starting %A..." "fours"
         do helper.listPrint fin 
         do printfn "sum is \t%A \n" (List.sumBy (fun (a,b,c,d)->d) fin)
+    type bouncy = Dec|Inc|Unknown
+    let hundredTwelve n =
+        let rec loop2 n prev b = 
+            if n=0L then 
+                0.0 //its technically increasing 
+            else
+                match n%10L, b with
+                |a,Unknown when a>prev -> loop2 (n/10L) a Dec
+                |a,Inc when a>prev -> 1.0  
+                |a,Unknown when a<prev -> loop2 (n/10L) a Inc
+                |a,Dec when a<prev ->  1.0
+                |a,_ -> loop2 (n/10L) a b
+        let rec loop1 n cnt =
+            let newcnt = (loop2 (n/10L) (n % 10L) Unknown)
+            if (cnt+newcnt)/(n-1L|>float) = 0.99 then 
+                n
+            else
+                loop1 (n+1L) (cnt+newcnt)
+        -1L+(loop1 102L 0.0) 

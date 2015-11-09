@@ -176,3 +176,8 @@
                                                             prev.[x-1]+prev.[x]) ) 
                 loop (i-1) next (next::acc)
         loop i [] []
+    let factorial n = 
+        let rec loop acc i=
+            if i<2 then acc
+            else loop (acc*(bigint i)) (i-1)
+        loop 1I n 
