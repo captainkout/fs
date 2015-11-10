@@ -56,3 +56,41 @@
             else
                 loop1 (n+1L) (cnt+newcnt)
         -1L+(loop1 102L 0.0) 
+    let hundredTwelve_unfold start =
+        let rec loop n cnt = 
+            let x = Seq.unfold (fun n ->
+                                    if n>0 then 
+                                        Some(n % 10, n/10) 
+                                    else 
+                                        None) n 
+                        |> Seq.toList
+            if x <> List.rev (List.sort x) 
+                && x <> List.sort x then
+                if (float (cnt+1))/(float n) >= 0.99 then 
+                    n
+                else
+                    loop (n+1) (cnt+1)
+            else 
+                loop (n+1) cnt
+        loop 1 1
+    let hundredThirteen start =
+        let chooseNR n r =
+            (helper.factorial n)/(helper.factorial (r))/ (helper.factorial (n-r))
+        let n = 100
+        (chooseNR (n+10) 10)+(chooseNR (n+9) 9)-10I*(bigint n)-2I
+    let hundredThirteen_janky start = //from observed pattern
+        let chooseNR n r =
+            (helper.factorial n)/
+            (helper.factorial (r))/ 
+            (helper.factorial (n-r))
+        let d = 100
+        let l1 =List.init (d-1) (fun n -> //d-1 because we add 9I onto l1
+                                    chooseNR (n+10) (n+2))
+        let l2 = l1.Tail
+                    |> List.mapi (fun i n->
+                                    helper.listSlice [0..i] l1 |> List.sum)
+        List.zip (9I::(l1 
+                        |> List.map (fun x->2I*x))) (0I::0I::l2) 
+            |> List.map (fun (a,b) ->
+                            a+b)
+            |> List.sum

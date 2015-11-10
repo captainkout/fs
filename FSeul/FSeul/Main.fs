@@ -7,17 +7,15 @@ let garbage f =
     GC.Collect()
     GC.WaitForFullGCComplete() |>   ignore
     GC.WaitForPendingFinalizers()
-    let timer = System.Diagnostics.Stopwatch()
+    let timer = new System.Diagnostics.Stopwatch()
     timer.Start()
     (f 0) |> printfn "%A"
     timer.Elapsed |>printfn "%A"
 
 
 let Main frig =
-    let f start = 
-        let x = Seq.unfold (fun n->if n>0 then Some(n % 10, n/10) else None) 123456 |> Seq.toList
-        x = List.sort x 
+    garbage eulib110_119.hundredThirteen_janky
+    garbage eulib110_119.hundredThirteen
 
-    garbage f
 Main "bologna"
 System.Console.ReadKey() |>ignore
