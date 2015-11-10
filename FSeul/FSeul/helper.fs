@@ -129,7 +129,7 @@
             else arr|>List.ofArray
         loop num
     let listPrint l = 
-        List.iter (fun x -> printfn "%A" x) l
+        List.iteri (fun i x -> printfn "%A\t%A" i x) l
     let primeSeq max=
         let bitarr = new System.Collections.BitArray((max/2)+1,true)
         bitarr.[0]<-false
@@ -181,3 +181,5 @@
             if i<2 then acc
             else loop (acc*(bigint i)) (i-1)
         loop 1I n 
+    let chooseNR n r =
+        (factorial n)/(factorial (r))/ (factorial (n-r))

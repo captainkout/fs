@@ -94,3 +94,19 @@
             |> List.map (fun (a,b) ->
                             a+b)
             |> List.sum
+    let hundredFourteen start =
+        let n =50
+        let rec loop i l = //http://oeis.org/A005252
+            match l with 
+            |n1::n2::n3::n4::t when i>3 -> loop (i-1) ((2L*n1-n2+n4)::n1::n2::n3::[])
+            |h::t -> h
+            |_ -> failwith "too short"
+        loop n [2L;1L;1L;1L]
+    let hundredFifteen start = //http://oeis.org/A005252 general solution
+        let m = 50
+        let rec loop l m n =
+            match l with
+            |n0::t when n0 >=1000000L -> (n-1)
+            |n1::n2::t -> loop ((2L*n1-n2+l.[m])::l) m (n+1)
+            |_ -> failwith "too short"
+        loop (2L::(List.init m (fun i-> 1L))) m (m+1)
