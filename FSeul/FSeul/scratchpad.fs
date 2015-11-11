@@ -1,4 +1,4 @@
-﻿module scratchpad
+﻿module Scratchpad
     open System
 
     let test r b =
@@ -13,7 +13,7 @@
 
     let rec loop n= seq{
         let x = Seq.unfold (fun n ->
-                                if n>0 then 
+                                if n > 0 then 
                                     Some(n % 10, n/10) 
                                 else 
                                     None) n 
@@ -29,5 +29,4 @@
         //let sn = Seq.takeWhile (fun x->x<(pown 10 a)) s |> Seq.length
         Seq.takeWhile (fun x->(x<pown 10 (a+1))) s
             |> Seq.length
-            |> printfn "%A" 
-
+            |> printfn "%A"

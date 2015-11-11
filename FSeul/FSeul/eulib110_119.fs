@@ -1,6 +1,7 @@
 ﻿module eulib110_119
     let hundredEleven start = 
-        let primes = helper.primeSeqL (pown 10L 6) |> Seq.toArray
+        let primes = helper.primeSeqL (pown 10L 6) 
+                        |> Seq.toArray
         let rec isprime n i=
             if n % primes.[i] =0L then 
                 false
@@ -37,7 +38,10 @@
         do printfn "starting %A..." "fours"
         do helper.listPrint fin 
         do printfn "sum is \t%A \n" (List.sumBy (fun (a,b,c,d)->d) fin)
-    type bouncy = Dec|Inc|Unknown
+    type Bouncy = 
+        |Dec
+        |Inc
+        |Unknown
     let hundredTwelve n =
         let rec loop2 n prev b = 
             if n=0L then 
@@ -45,13 +49,13 @@
             else
                 match n%10L, b with
                 |a,Unknown when a>prev -> loop2 (n/10L) a Dec
-                |a,Inc when a>prev -> 1.0  
+                |a,Inc when a>prev -> 1.0
                 |a,Unknown when a<prev -> loop2 (n/10L) a Inc
                 |a,Dec when a<prev ->  1.0
                 |a,_ -> loop2 (n/10L) a b
         let rec loop1 n cnt =
             let newcnt = (loop2 (n/10L) (n % 10L) Unknown)
-            if (cnt+newcnt)/(n-1L|>float) = 0.99 then 
+            if (cnt+newcnt)/(n-1L |> float) = 0.99 then 
                 n
             else
                 loop1 (n+1L) (cnt+newcnt)
@@ -84,7 +88,7 @@
             (helper.factorial (r))/ 
             (helper.factorial (n-r))
         let d = 100
-        let l1 =List.init (d-1) (fun n -> //d-1 because we add 9I onto l1
+        let l1 = List.init (d-1) (fun n -> //d-1 because we add 9I onto l1
                                     chooseNR (n+10) (n+2))
         let l2 = l1.Tail
                     |> List.mapi (fun i n->
@@ -98,7 +102,7 @@
         let n =50
         let rec loop i l = //http://oeis.org/A005252
             match l with 
-            |n1::n2::n3::n4::t when i>3 -> loop (i-1) ((2L*n1-n2+n4)::n1::n2::n3::[])
+            |n1::n2::n3::n4::t when i>3 -> loop (i-1) ((2L*n1-n2+n4)::n1::n2::[n3])
             |h::t -> h
             |_ -> failwith "too short"
         loop n [2L;1L;1L;1L]
@@ -110,3 +114,12 @@
             |n1::n2::t -> loop ((2L*n1-n2+l.[m])::l) m (n+1)
             |_ -> failwith "too short"
         loop (2L::(List.init m (fun i-> 1L))) m (m+1)
+    let hundredSixteen start = 
+        let n = 5
+        let rec loop i m l =
+            match l with
+            |n0::t when i<m-2 -> n0
+            |n1::t -> loop (i-1) m ((1L+n1+l.[m])::l)
+            |_ -> failwith "too short"
+        [2;3;4]
+            |> List.map (fun m -> loop n m (1L::(List.init m (fun i-> 0L))) )
