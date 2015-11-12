@@ -1,1 +1,4 @@
 # git ignore file
+bin/
+obj/
+App_data/
