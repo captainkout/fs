@@ -14,7 +14,8 @@ let garbage f =
 
 
 let Main frig =
-
+    let f start =
+        0
     garbage eulib110_119.hundredSixteen
 
 Main "bologna"

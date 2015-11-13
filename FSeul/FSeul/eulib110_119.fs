@@ -114,12 +114,26 @@
             |n1::n2::t -> loop ((2L*n1-n2+l.[m])::l) m (n+1)
             |_ -> failwith "too short"
         loop (2L::(List.init m (fun i-> 1L))) m (m+1)
-    let hundredSixteen start = 
-        let n = 5
-        let rec loop i m l =
+    let hundredSixteen start =
+        let n = 50
+        let f m n =
+            let rec loop l jlst =
+                match l,jlst with
+                |_,[] -> List.head l
+                |j::t,hh::tt -> 
+                    loop ((j+l.[m-1])::(List.rev l 
+                                        |> List.tail 
+                                        |> List.rev)) tt
+                |_,_ -> failwith "too short"
+            loop (List.init m (fun x->if x=0 then 2L else 1L)) [m..n-1]
+        (f 2 n)+(f 3 n)+(f 4 n)-3L
+    let hundredSeventeen start =
+        let m = 50L
+        let rec loop l i =
             match l with
-            |n0::t when i<m-2 -> n0
-            |n1::t -> loop (i-1) m ((1L+n1+l.[m])::l)
-            |_ -> failwith "too short"
-        [2;3;4]
-            |> List.map (fun m -> loop n m (1L::(List.init m (fun i-> 0L))) )
+            |h::t when i<=0L -> h
+            |_ -> 
+                loop ((List.sum l)::(List.rev l 
+                                        |> List.tail 
+                                        |> List.rev)) (i-1L)
+        loop [8L;4L;2L;1L] (m-4L)
