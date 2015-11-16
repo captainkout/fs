@@ -134,19 +134,21 @@
         let bitarr = new System.Collections.BitArray((max/2)+1,true)
         bitarr.[0]<-false
         seq{yield 2
-            for i in 1..bitarr.Count-1 do
-                if bitarr.[i] = true then
+            for i in 1..(bitarr.Length-1) do
+                if bitarr.[i] then
                     yield (2*i+1)
-                    for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
-                        bitarr.[j]<-false }
+                    if i<(isqrt max)+1 then
+                        for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
+                            bitarr.[j]<-false }
     let primeSeqL max=
         let bitarr = new System.Collections.BitArray((max/2L)+1L|>int,true)
         bitarr.[0]<-false
         seq{yield 2L
-            for i in 1..bitarr.Count-1 do
-                if bitarr.[i] = true then
+            for i in 1..(bitarr.Length-1)do
+                if bitarr.[i] then
                     yield (2*i+1 |>int64)
-                    for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
+                    if i<(Lsqrt max|>int)+1 then
+                        for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
                         bitarr.[j]<-false }
     let pythagTrianglei i =
         let rec loop i prev acc =
@@ -183,3 +185,10 @@
         loop 1I n 
     let chooseNR n r =
         (factorial n)/(factorial (r))/ (factorial (n-r))
+//    let csvWrite (s:seq<int64>) col name =
+//        use streamWriter = new System.IO.StreamWriter(name+".txt")
+//        s 
+//            |> Seq.iteri (fun i p ->    if i % col = col-1 then streamWriter.Write(String.Format ("{0}\n",p))
+//                                        else streamWriter.Write(String.Format("{0},",p))) 
+//        do streamWriter.Close()
+//        "complete"
