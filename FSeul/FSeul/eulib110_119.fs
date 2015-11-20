@@ -177,3 +177,24 @@
                 let ns = List.map (fun l -> loop1 ph l [] (-1)) maps |> Set.ofList
                 loop2 pt (Set.union ns acc)
         loop2 poss (set[])
+    let hundredNineTeen start =
+        let rec test i acc targ =
+            if i=1I || acc > targ then false
+            elif acc = targ then true
+            else test i (i*acc) targ
+        let rec loop2 l s =
+            match l with
+            |[] -> s
+            |h::t ->
+                let x = helper.sumdig 0I h
+                if test x x h then
+                    loop2 t (Set.add h s)
+                else loop2 t s
+        let rec loop1 e s=
+            let l = List.init 1000 (fun i-> pown (bigint i) e)
+            if Set.count s < 100 then
+                loop2 l s 
+                    |> Set.union s
+                    |> loop1 (e+1)
+            else Set.filter (fun i-> i>11I) s |> Set.toList
+        (loop1 2 (set[])).[29]

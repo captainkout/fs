@@ -14,9 +14,8 @@ let garbage f =
 
 
 let Main frig =
-    let f start =
-        "blah"
-    garbage f
+
+    garbage eulib120_129.hundredTwenty
 
 Main "bologna"
 System.Console.ReadKey() |>ignore
