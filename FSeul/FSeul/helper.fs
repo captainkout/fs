@@ -133,11 +133,12 @@
     let primeSeq max=
         let bitarr = new System.Collections.BitArray((max/2)+1,true)
         bitarr.[0]<-false
+        let newmax = (isqrt max)+1
         seq{yield 2
             for i in 1..(bitarr.Length-1) do
                 if bitarr.[i] then
                     yield (2*i+1)
-                    if i<(isqrt max)+1 then
+                    if i<newmax then
                         for j in (3*i+1)..(2*i+1)..(bitarr.Count-1) do
                             bitarr.[j]<-false }
     let primeSeqL max=

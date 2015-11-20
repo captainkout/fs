@@ -137,3 +137,43 @@
                                         |> List.tail 
                                         |> List.rev)) (i-1L)
         loop [8L;4L;2L;1L] (m-4L)
+    let hundredEightTeen start =
+        let poss = helper.perm [1..9]
+        let primes = helper.primeSeq (helper.isqrt (pown 10 9))
+                        |> Seq.toList
+        let maps = [for one in 0..1 do
+                    for two in 0..1 do
+                    for three in 0..1 do
+                    for four in 0..1 do
+                    for five in 0..1 do
+                    for six in 0..1 do
+                    for seven in 0..1 do
+                    for eight in 0..1 do
+                    for nine in 0..1 do
+                    yield [one;two;three;four;five;six;seven;eight;nine]]
+        let rec isprime i plist isq =
+            match plist with
+            |_::_ when i=1 -> false
+            |ph::pt when i = ph || ph > isq -> true
+            |ph::pt when i % ph =0 ->false
+            |ph::pt -> isprime i pt isq
+            |_ ->failwith "you messed up"
+        let rec loop1 digits mapval acc prev =
+            match digits,mapval,acc with
+            |dh::dt,mh::mt,[]-> loop1 dt mt [dh] mh
+            |dh::dt,mh::mt,ah::at->
+                if prev = -1 || prev=mh  then loop1 dt mt ((ah*10+dh)::at) mh
+                elif isprime ah primes (helper.isqrt ah) then 
+                    loop1 dt mt (dh::acc) mh
+                else set[]
+            |_,_,_-> 
+                if isprime (List.head acc) primes (helper.isqrt (List.head acc)) then 
+                    Set.ofList acc
+                else set[]
+        let rec loop2 poslist acc =
+            match poslist with
+            |[] -> (Set.count acc)-1 //minus one for empty set
+            |ph::pt -> 
+                let ns = List.map (fun l -> loop1 ph l [] (-1)) maps |> Set.ofList
+                loop2 pt (Set.union ns acc)
+        loop2 poss (set[])
