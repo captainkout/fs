@@ -1,4 +1,5 @@
 ﻿module helper 
+
     open System.Collections.Generic
     let rec gcd a b = 
         match (a % b) with
@@ -53,3 +54,5 @@
         let client = new System.Net.WebClient()
         let s = new System.IO.StreamReader(client.OpenRead(address))
         s.ReadToEnd()
+        
+        System.
